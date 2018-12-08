@@ -1,5 +1,7 @@
 - name: Home
   link: posts/
+- name: Linked Lists
+  link: posts/linkedlists.html
 - name: Final Card-Down Tips
   link: posts/hints.html
 - name: Game.c Memory Problems
