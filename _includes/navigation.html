@@ -1,0 +1,12 @@
+<nav class="navbar fixed-top navbar-expand-lg no-print">
+  <ul class="navbar-nav">
+  {% for item in site.data.navigation %}
+      <li class="nav-item">
+        <a class="nav-link navbar-brand {% if page.url == item.link %}
+        active {% endif %}" href="{{ site.url }}{{ item.link }}">
+            {{ item.name }}
+        </a>
+    </li>
+  {% endfor %}
+  </ul>
+</nav>
