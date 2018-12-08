@@ -2,3 +2,5 @@
   link: posts/
 - name: Final Card-Down Tips
   link: posts/hints.html
+- name: Game.c Memory Problems
+  link: posts/game_memory.html
