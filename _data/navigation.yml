@@ -1,5 +1,7 @@
 - name: Home
   link: posts/
+- name: Style Tips
+  link: posts/style.html
 - name: Linked Lists
   link: posts/linkedlists.html
 - name: Final Card-Down Tips
