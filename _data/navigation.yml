@@ -1,10 +1,15 @@
 - name: Home
-  link: posts/
+  link: /posts/
 - name: Style Tips
-  link: posts/style.html
+  link: /posts/style.html
+- name: Undefined Behaviour
+  link: /posts/undefined.html
+- name: Uninitialised Variables + dcc
+  link: /posts/uninitialised_dcc.html
 - name: Linked Lists
-  link: posts/linkedlists.html
-- name: Final Card-Down Tips
-  link: posts/hints.html
-- name: Game.c Memory Problems
-  link: posts/game_memory.html
+  link: /posts/linkedlists.html
+
+  #- name: Final Card-Down Tips
+  #link: posts/hints.html
+  #- name: Game.c Memory Problems
+  #link: posts/game_memory.html

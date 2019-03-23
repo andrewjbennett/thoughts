@@ -1,5 +1,5 @@
 ---
-title: Undefined Behaviour, or: what happens when you forget to return from your function?
+title: Undefined Behaviour, or; what happens when you forget to return from your function?
 layout: words
 written: COMP1511 19T1
 ---
