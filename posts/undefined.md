@@ -358,9 +358,9 @@ ulong factorial(uint num) {
 ```
 
 (note: `uint` means "unsigned int", i.e. an integer value which can
-never be negative. `ulong` means "unsigned long", which is another
-sort of integer value which can never be negative, except it might be
-able to store bigger numbers than an int)
+never be negative, and where overflow/underflow is a defined behaviour;
+ `ulong` means "unsigned long", which is the same as a `uint`, except
+that it might be able to store larger numbers [^6])
 
 As you can see, it's used an extra temporary variable for some reason
 _(although this might be an artefact of how the assembly code was
@@ -647,4 +647,67 @@ Footnotes:
 [^5]: I used [ghidra](https://ghidra-sre.org/), a suite of reverse
     engineering tools recently released by the NSA. It's free and open
     source, and very powerful.
+
+[^6]: There are quite a few "varients" of integers in C, although in
+    COMP1511 you will only ever need to use the normal one, `int`.
+    
+    The first varient is "signed" vs "unsigned". A "signed int" is the
+    same as a "normal" int -- it can hold numbers that are positive or
+    negative.
+    
+    An "unsigned int" can only hold positive numbers, and can't hold
+    negative numbers. This does mean that it can store (positive)
+    numbers that are twice as big as a normal / signed int can -- a
+    normal int can store between e.g. `-x` and `+x`; an unsigned int can
+    store between `0` and `+2x` -- they can both store `2x` different
+    values in total.
+    
+    Something else potentially noteworthy about unsigned numbers in C is
+    that it's _not_ undefined behaviour for them to overflow -- if you
+    try to store a number that's larger than the biggest possible value
+    that will fit in an unsigned int, it "wraps around" starting again
+    from zero, i.e. it will store the number mod the largest possible
+    number that it can store.
+
+    This would be why the dcc versions of the compiled code use an
+    unsigned int to store the result of the factorial -- because it's
+    not undefined behaviour for it to overflow, and so it doesn't have
+    to check whether any operations on that variable would have
+    overflowed.
+
+    ~ ~ ~
+
+    The other varient is "short" vs "long" (vs normal).
+
+    A normal int is defined as being able to store at least numbers in
+    the range `[−32,767, +32,767]`, which means it must be at least 16
+    bits in size.
+
+    On modern systems (e.g. the CSE machines or your personal computer),
+    it will usually be at least 32 bits, and so capable of storing
+    numbers in the range `[−2,147,483,647, +2,147,483,647]`.
+
+    But according to the C specification, it doesn't _have_ to be that
+    big, it only has to be at least 16 bits in size.
+    
+    We then have a "short int", which is again defined as being at least
+    16 bits in size, and so can store numbers in the range
+    `[−32,767, +32,767]`,
+
+    We also have a "long int", which is defined as being at least 32
+    bits in size -- so is able to store numbers in the range
+    `[−2,147,483,647, +2,147,483,647]`.
+
+    Finally, we have a "long long int", which is defined as being at
+    least 64 bits in size -- so capable of storing numbers in the range
+    `[−9,223,372,036,854,775,807, +9,223,372,036,854,775,807]`.
+
+    You can also have an unsigned version of each of those types, e.g.
+    an `unsigned short int` can store numbers in the range 
+    `[0, 65,535]`, all the way through to an `unsigned long long int`,
+    which can store numbers in the range
+    `[0, +18,446,744,073,709,551,615]`.
+
+    Again, in COMP1511 the only type you ever need to know about is a
+    good old normal `int`.
 

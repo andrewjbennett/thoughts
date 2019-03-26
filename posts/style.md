@@ -7,6 +7,8 @@ written: COMP1511 18s1 Course Forum
 ### Overview
 
 1. Breaking up long if statements
+1. Writing readable code
+1. Function names and comments
 1. Readability vs efficiency
 1. Breaking up a very complicated piece of code into functions
 
@@ -118,12 +120,338 @@ if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)) {
 They both achieve the same thing, but reading the first one is (in my
 opinion) significantly clearer than the second one.
 
+------------------
+
+> So if we are unable to use the multiple if statement version of this
+> and our statement is made up of 5 &&'s or something like that what is
+> the best thing to do style-wise, aside from using a function since the
+> code would still be messy within the function anyway?
+
+You can make the if statement chain within the function clearer (see the
+leap year example above).
+
+Taking your example:
+
+```c
+// Without limit
+if (condition1 == num1 && condtion2 < num2 && condtion4 != num3 && condition5 == num5) {
+    variable1 = 1;
+} else if (condition6 == num6 && condition7 < num7 && condition8 != num8 && condition9 % 2 == 0) {
+    variable1 = 2;
+} else if (condition10 == num10 && condition11 < num11 && condition12 != num12) {
+    variable1 = 3;
+else {
+    variable1 = 0;
+}
+```
+
+This could become:
+
+```c
+if (the_sky_is_blue(...)) {
+    variable1 = 1;
+} else if (it_is_raining(...)) {
+    variable1 = 2;
+} else if (the_sun_is_on_fire(...)) {
+    variable1 = 3;
+else {
+    variable1 = 0;
+}
+```
+
+And then the functions could become something like:
+
+```c
+// this is one example of how you could structure the if statement within a function
+int some_thing_to_check(...) {
+    return (condition1 == num1
+        && condtion2 < num2
+        && condtion4 != num3
+        && condition5 == num5);
+}
+
+// could also structure it like this
+int some_other_thing_happened(...) {
+    return condition6 == num6 &&
+           condition7 < num7 && 
+           condition8 != num8 && 
+           condition9 % 2 == 0;
+}
+
+// or something like this (or any other number of ways)
+int the_sun_is_on_fire(...) {
+    int is_on_fire = FALSE;
+    if (condition10 == num10
+        && condition11 < num11
+        && condition12 != num12) {
+
+        is_on_fire = TRUE;
+    }
+
+    return is_on_fire;
+}
+```
 
 -------------------
 
 -------------------
 
 -------------------
+
+### Writing Readable Code
+
+> The style guide says:
+> "Break long lines up to keep them under 80 characters, unless keeping it as a longer line is significantly more readable."
+>
+> What does it mean by "significantly" more readable. For example I have a line like this: 
+```c
+int counter2 = 0; //Counter which will be used for cards used in current round
+```
+>
+
+**Inline comments**:
+
+Please don't use inline comments in your code like that -- comments
+should go on the line above the relevant thing, rather than on the same
+line.
+
+So, in your example, it would become this:
+
+```c
+//Counter which will be used for cards used in current round
+int counter2 = 0;
+```
+However, in general, if you feel like you need to have comments within
+your code like that, then often that's a sign that you should rewrite
+your code to be clearer so that it doesn't need to be commented in order
+to be understand.
+
+
+---
+
+In terms of more general feedback (extrapolating on what you've posted
+and what I think it could mean)
+
+**Declaring variables**
+
+Don't declare all of your variables at the top like that -- declare
+them when you first "use" them.
+
+This also helps avoid the need to comment what they are or what they're
+used for, because they're declared in the context that they're going to
+be used, and so within that context the name should (hopefully) make
+sense.
+
+**Variable names**
+
+Make sure that your variables all have sensible, descriptive names.
+
+With the example I've written below, the variable names for things
+like arrays and sizes of the arrays all describe what they're doing --
+because those variables all have some inherent meaning (e.g. the fruit
+array is used to store fruit), and so the variable name describes that
+inherent meaning.
+
+For the loop counters, I've used `i` for all of them, because the loop
+counters don't have any meaning beyond the fact that they're loop
+counters, and `i` is the conventional name for a loop counter, so when
+somebody reads your code they see `i` and think "ah yes, the loop
+counter". There's no need to use a name like "counter".
+
+(side note to that: if you think back to things where you were printing
+squares and boxes etc, in that case your loop counters referred to the
+rows and columns. It would be sensible to call those loop counters
+`int row` and `int col`, because they do have meaning beyond just being
+arbitrary loop counters -- they refer to the current row and the current
+column. But for general loop counters that don't refer to anything
+specific like that, just calling them `i` is best.)
+
+
+**#defined constants**
+
+Related to the previous one -- make sure that you use #defines for any
+constants. So rather than making an array be something like
+`int fruit[10]`, instead make it be `int fruit[MAX_FRUIT_TYPES]` or
+whatever.
+
+Again, this helps make your code more readable, and avoids the need to
+have comments.
+
+
+---
+
+**Example**
+
+To help illustrate what I mean:
+
+If you imagine something similar to the assignment's function to choose
+which cards to discard, but instead about a fruit+vege shop rather than
+a card game:
+
+
+```c
+// ADD CODE TO READ THE FIRST THREE NUMBERS WHICH ARE:
+// NUMBER OF VEGETABLES, NUMBER OF FRUITS, SHOP NUMBER
+
+int num_vegetables, num_fruits, shop_number;
+scanf("%d %d %d", &num_vegetables, &num_fruits, &shop_number;
+
+
+// ADD CODE TO READ THE VEGETABLES INTO AN ARRAY
+// YOU WILL NEED TO USE A WHILE LOOP AND SCANF
+int vegetables[SOME_SENSIBLE_HASH_DEFINED_CONSTANT];
+int i = 0;
+while (i < num_vegetables) {
+    // scan the vegetables into the array
+    i++;
+}
+
+// ADD CODE TO READ THE FRUITS INTO AN ARRAY
+// YOU WILL NEED TO USE A WHILE LOOP AND SCANF
+int fruits[SOME_SENSIBLE_HASH_DEFINED_CONSTANT];
+i = 0;
+while (i < num_fruits) {
+    // scan the fruits into the array
+    i++;
+}
+```
+
+
+Of course, those shouty all-caps comments are just there to tell you
+what to do, and so you should remove them once you've done that part,
+which would leave me with this code:
+
+```c
+int num_vegetables, num_fruits, shop_number;
+scanf("%d %d %d", &num_vegetables, &num_fruits, &shop_number;
+
+int vegetables[MAX_VEGE_TYPES];
+int i = 0;
+while (i < num_vegetables) {
+    // whatever code needed to scan the vegetables into the array
+    i++;
+}
+
+int fruits[MAX_FRUIT_TYPES];
+i = 0;
+while (i < num_fruits) {
+    // whatever code needed to scan the fruits into the array
+    i++;
+}
+```
+
+Nothing anywhere in that code needs any comments at all, and adding
+comments would just be redundant.
+
+You can tell from looking at the arrays, for example, exactly what
+they're storing. You can tell what the size variables mean, so adding a
+comment next to them saying something like "the number of vegetables in
+the shop" -- it's obvious from context and the name that a variable
+called "num_vegetables" in a program about a fruit+vege shop refers to
+the number of vegetables in the shop.
+
+Both loops use the loop counter `i`, and this is the best thing to do
+when you have multiple loops one after the other -- there's no point
+making a new loop counter "j" and "k" etc for subsequent while loops,
+unless you have to (e.g. unless the loops are nested inside each other,
+so you need more than one loop counter).
+
+----
+
+There are further improvements that you could make on that code, if you
+wanted to: one that stands out would be to make a function that scans in
+the array values, rather than having a new loop each time to do it.
+
+This would make the code look like:
+
+```c
+int num_vegetables, num_fruits, shop_number;
+scanf("%d %d %d", &num_vegetables, &num_fruits, &shop_number;
+
+int vegetables[MAX_VEGE_TYPES];
+scan_array(vegetables, num_vegetables);
+
+int fruits[MAX_FRUIT_TYPES];
+scan_array(fruits, num_fruits);
+```
+
+You can see that I've now turned what was originally > 20 lines into six
+lines of code -- and each of those six lines describes exactly what it
+does.
+
+---
+
+**Abstraction**
+
+In my opinion, the goal for writing well-styled code is to have it read
+"like a book" -- so I read through the function and the code describes
+_what_ the function is doing, but not _how_ it does it.
+
+For example -- I call the `scan_array` function on my vegetables array.
+This is describing that my function scans in the vegetables, and stores
+them in the vegetables array.
+
+When I'm reading through this function, I don't really care _how_ it
+scans them in -- I don't need to see the details of how the loop works
+that scans them in.
+
+The only thing that I'm interested in is _what_ the code is doing -- and
+it's very clear that it's scanning in the vegetables and fruits into
+their respective arrays.
+
+This concept of making the code describe _what_ it's doing but not _how_
+it's doing it is called "abstraction".
+
+----
+
+ 
+
+That answer got a bit longer than I was expecting, but hopefully the content is useful.
+
+ 
+
+I'm very passionate about programming style, because I've seen the very huge difference it makes when reading code that's well-written and well-abstracted* compared to reading code that hasn't had that sort of craftsmanship put into it, and it just makes me so happy when I read beautiful code.
+
+ 
+
+I'm always happy to discuss ways to improve code, or to answer any questions about style / writing good code / etc.
+
+ 
+
+----
+
+ 
+
+( * by "well-abstracted", I'm referring to the concept of what I did with moving the scanning array code into a function called scan_array -- making the code say what it's doing but not how it's doing it)
+
+-------------------
+
+-------------------
+
+-------------------
+
+
+
+
+
+-------------------
+
+-------------------
+
+-------------------
+
+### Function names and comments
+
+TODO: copy this answer here
+
+-------------------
+
+-------------------
+
+-------------------
+
+
+
 
 ### Readability vs efficiency
 
