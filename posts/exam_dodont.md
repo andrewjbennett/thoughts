@@ -225,7 +225,7 @@ if (strcmp(sightings[i].species, "Orca") == 0) {
 ```
 
 
-Be careful to use `strcmp` (<b>STR</b>ing <B>COM</b>pare), not `strcpy`!
+Be careful to use `strcmp` (<b>STR</b>ing <b>C</b>o<b>MP</b>are), not `strcpy`!
 (<b>STR</b>ing <b>C</b>o<b>PY</b>)
 
 <div class="alert alert-danger">
